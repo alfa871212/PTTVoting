@@ -37,6 +37,7 @@ class StatSys:
     def __init__(self, urlLis):
         #self.num_voter = len(userLis)
         self.num_voter = 0
+        self.repeated_voter=[]
         self.urlLis = urlLis
         self.result = [0]*120
         self.vote_times = [0]*4 # vote_times[] saves the number of voters who vote once, twice ...
@@ -49,6 +50,23 @@ class StatSys:
         self.resDict = dict()
         #self.rankDict = dict.fromkeys(comicLis, 0)
         self.rankDict = dict()
+    def index_in_id_lis(self,lis,id):
+        temp=[]
+        for i in range(len(lis)):
+            temp.append(lis[i].id)
+        if id in temp:
+            return temp.index(id)
+        else:
+            return
+    def check_in_id_lis(self,lis,id):
+        temp=[]
+        for i in range(len(lis)):
+            temp.append(lis[i].id)
+        return id in temp
+    def find_user(self,lis,id):
+        for i in range(len(lis)):
+            if lis[i].id == id:
+                return lis[i]
     def grabUrl(self):
         for i in range(len(urlLis)):
             print("Requesting reponse from URL...")
@@ -80,9 +98,10 @@ class StatSys:
             for i in range(len(user_id_lis)):
                 push_id = user_id_lis[i]
                 content = content_lis[i]
-                if (check_in_id_lis(self.userLis,push_id)):
-                    print(push_id)
-                    ind = index_in_id_lis(self.userLis,push_id)
+                if (self.check_in_id_lis(self.userLis,push_id)):
+                    #print(push_id)
+                    self.repeated_voter.append(push_id)
+                    ind = self.index_in_id_lis(self.userLis,push_id)
                     self.userLis[ind].rawcontent.append(content)
                     self.userLis[ind].add_counts()
                 else:    
@@ -178,117 +197,13 @@ class StatSys:
 
 
 # Useful function --> should implement in statSys
-def index_in_id_lis(lis,id):
-    temp=[]
-    for i in range(len(lis)):
-        temp.append(lis[i].id)
-    if id in temp:
-        return temp.index(id)
-    else:
-        return
-def check_in_id_lis(lis,id):
-    temp=[]
-    for i in range(len(lis)):
-        temp.append(lis[i].id)
-    return id in temp
-def find_user(lis,id):
 
-    for i in range(len(lis)):
-        if lis[i].id == id:
-            return lis[i]
 
 url = 'https://www.ptt.cc/bbs/C_Chat/M.1676194202.A.7DD.html'
-# print("Requesting reponse from URL...")
-# html = requests.get(url)
-# print("URL html get!")
-# html_str = html.text
-# soup = BeautifulSoup(html_str, 'lxml')
-# user_id_from_url=soup.find_all(class_="f3 hl push-userid")
-# user_id_lis=[]
-# content_from_url=soup.find_all(class_="f3 push-content")
-# content_lis=[]
-# main_content=soup.find(id='main-content')
-# comic_name=[]
-
-# ind = 1
-# for tag in main_content:
-#     tmp = str(tag.string)
-#     if(tmp[0]=='='):
-#         last_word_index = tmp.find("\n")
-#         comic_name.append(tmp[1:last_word_index]+"("+str(ind)+")")
-#         ind = ind+1
-
-# for tag in user_id_from_url:
-
-#     user_id_lis.append(tag.string)
-# for tag in content_from_url:
-#     tmp = str(tag.string)
-#     tmp = tmp[2:]
-#     content_lis.append(tmp)
-
-# user_class_lis=[]
-# for i in range(len(user_id_lis)):
-#     push_id = user_id_lis[i]
-#     content = content_lis[i]
-#     if (check_in_id_lis(user_class_lis,push_id)):
-#         print(push_id)
-#         ind = index_in_id_lis(user_class_lis,push_id)
-#         user_class_lis[ind].rawcontent.append(content)
-#         user_class_lis[ind].add_counts()
-#     else:    
-#         tmp = []
-#         tmp.append(content)
-#         user = Users(push_id,tmp)
-#         user_class_lis.append(user)
-
-# for i in range(len(user_class_lis)):
-#     user_class_lis[i].create_voted_num()
-#     user_class_lis[i].check_valid_vote()
-
-
 url2 = 'https://www.ptt.cc/bbs/C_Chat/M.1676455607.A.9CA.html'
 urlLis = []
 urlLis.append(url)
 urlLis.append(url2)
-# print("Requesting reponse from URL...")
-# html2 = requests.get(url2)
-# print("URL html get!")
-# html_str2 = html2.text
-# soup2 = BeautifulSoup(html_str2, 'lxml')
-# user_id_from_url2=soup2.find_all(class_="f3 hl push-userid")
-# user_id_lis2=[]
-# content_from_url2=soup2.find_all(class_="f3 push-content")
-# content_lis2=[]
-# main_content2=soup2.find(id='main-content')
-# comic_name2=[]
-
-# ind = 1
-
-# for tag in user_id_from_url2:
-#     user_id_lis2.append(tag.string)
-# for tag in content_from_url2:
-#     tmp = str(tag.string)
-#     tmp = tmp[2:]
-#     content_lis2.append(tmp)
-
-# for i in range(len(user_id_lis2)):
-#     push_id = user_id_lis2[i]
-#     content = content_lis2[i]
-#     if (check_in_id_lis(user_class_lis,push_id)):
-#         print(push_id)
-#         ind = index_in_id_lis(user_class_lis,push_id)
-#         user_class_lis[ind].rawcontent.append(content)
-#         user_class_lis[ind].add_counts()
-#     else:    
-#         tmp = []
-#         tmp.append(content)
-#         user = Users(push_id,tmp)
-#         user_class_lis.append(user)
-
-# for i in range(len(user_class_lis)):
-#     user_class_lis[i].create_voted_num()
-#     user_class_lis[i].check_valid_vote()
-
 
 #statsys = StatSys(user_class_lis,comic_name,urlLis)
 statsys = StatSys(urlLis)
