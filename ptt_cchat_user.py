@@ -17,11 +17,19 @@ class Users:
         self.counts = self.counts+1
     def create_voted_num(self):
         temp=[]
+        delimiter = [',','、','.','。','@','，']
         for i in range(self.counts):
             ind = self.counts - i - 1
+            #temp = self.rawcontent[ind].split()
             temp = self.rawcontent[ind].split()
+            for k in delimiter:
+                #temp2 = self.rawcontent[ind].split(k)
+                temp2 = self.rawcontent[ind].replace(k,' ').split()
+                if(len(temp2)>=len(temp)):
+                    print(self.rawcontent[ind])
+                    temp = temp2
+
             for j in range(len(temp)):
-      
                 if (temp[j].isdigit()):
                     if(int(temp[j]) not in self.voted_num_lis):
                         if (int(temp[j])<=120):
@@ -63,6 +71,14 @@ class StatSys:
         for i in range(len(lis)):
             temp.append(lis[i].id)
         return id in temp
+    def find_user_new(self,id):
+        for i in range(self.num_voter):
+            if self.userLis[i].id == id:
+                print(self.userLis[i].voted_num_lis)
+    def find_all_users_vote_for_this(self,num):
+        for i in range(self.num_voter):
+            if num in self.userLis[i].voted_num_lis:
+                print(self.userLis[i].id)
     def find_user(self,lis,id):
         for i in range(len(lis)):
             if lis[i].id == id:
