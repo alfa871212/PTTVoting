@@ -26,7 +26,7 @@ class Users:
                 #temp2 = self.rawcontent[ind].split(k)
                 temp2 = self.rawcontent[ind].replace(k,' ').split()
                 if(len(temp2)>=len(temp)):
-                    print(self.rawcontent[ind])
+                    #print(self.rawcontent[ind])
                     temp = temp2
 
             for j in range(len(temp)):
@@ -58,6 +58,7 @@ class StatSys:
         self.resDict = dict()
         #self.rankDict = dict.fromkeys(comicLis, 0)
         self.rankDict = dict()
+        self.votedUserDict = dict() #create a dict whose key is comicName, value is a list contained the users who voted
     def index_in_id_lis(self,lis,id):
         temp=[]
         for i in range(len(lis)):
@@ -76,9 +77,12 @@ class StatSys:
             if self.userLis[i].id == id:
                 print(self.userLis[i].voted_num_lis)
     def find_all_users_vote_for_this(self,num):
+        temp=[]
         for i in range(self.num_voter):
             if num in self.userLis[i].voted_num_lis:
-                print(self.userLis[i].id)
+                #print(self.userLis[i].id)
+                temp.append(self.userLis[i].id)
+        self.votedUserDict[self.comicLis[num-1]] = temp
     def find_user(self,lis,id):
         for i in range(len(lis)):
             if lis[i].id == id:
@@ -160,6 +164,8 @@ class StatSys:
                 repeated_times = repeated_times+1
             buffer = sorted_all_results[i][1]
         self.sortedresList = sorted_all_results
+        for i in range(len(self.comicLis)):
+            self.find_all_users_vote_for_this(i+1)
     def checkRelation(self, num1,num2): # return P(vote num1 and num2| vote num1)
         vote_for_num1 = 0
         num1_comic_name = self.comicLis[num1-1]
@@ -212,7 +218,6 @@ class StatSys:
 
 
 
-# Useful function --> should implement in statSys
 
 
 url = 'https://www.ptt.cc/bbs/C_Chat/M.1676194202.A.7DD.html'
